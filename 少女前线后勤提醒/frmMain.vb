@@ -50,7 +50,7 @@ Public Class frmMain
     ' Declare data
     Private Sub InsertLogistic()
         arr_Logistic = {
-        New LogisticSupport("0-1", 0, 2),
+        New LogisticSupport("0-1", 0, 50),
         New LogisticSupport("0-2", 3, 0),
         New LogisticSupport("0-3", 12, 0),
         New LogisticSupport("0-4", 24, 0),
@@ -104,6 +104,7 @@ Public Class frmMain
         InsertLogistic()
         init()
         RetrieveSettings(0)
+        getAnnounceSettings()
     End Sub
 
     Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -127,8 +128,6 @@ Public Class frmMain
             NotifyIcon5.Icon = Nothing
             NotifyIcon5.Visible = False
             NotifyIcon5.Dispose()
-
-            End
         ElseIf dlgResult = DialogResult.Yes Then
             WindowState = FormWindowState.Minimized
             e.Cancel = True
@@ -137,11 +136,6 @@ Public Class frmMain
             NotifyIcon5.BalloonTipTitle = "后勤提醒"
             NotifyIcon5.BalloonTipText = "已最小化到托盘"
             NotifyIcon5.ShowBalloonTip(10000)
-            NotifyIcon5.Text =
-                "#1  " & currentTime1 & vbNewLine &
-                "#2  " & currentTime2 & vbNewLine &
-                "#3  " & currentTime3 & vbNewLine &
-                "#4  " & currentTime4 & vbNewLine
             ShowInTaskbar = False
         Else
             e.Cancel = True
@@ -260,6 +254,7 @@ Public Class frmMain
             NotifyIcon1.Visible = False
             NotifyIcon1.Icon = Nothing
         End If
+        updateNotifyIconText()
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
@@ -284,6 +279,7 @@ Public Class frmMain
             NotifyIcon2.Visible = False
             NotifyIcon2.Icon = Nothing
         End If
+        updateNotifyIconText()
     End Sub
 
     Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles Timer3.Tick
@@ -308,6 +304,7 @@ Public Class frmMain
             NotifyIcon3.Visible = False
             NotifyIcon3.Icon = Nothing
         End If
+        updateNotifyIconText()
     End Sub
 
     Private Sub Timer4_Tick(sender As Object, e As EventArgs) Handles Timer4.Tick
@@ -332,6 +329,7 @@ Public Class frmMain
             NotifyIcon4.Visible = False
             NotifyIcon4.Icon = Nothing
         End If
+        updateNotifyIconText()
     End Sub
 
     ' Button Click Event
@@ -498,7 +496,7 @@ Public Class frmMain
 
     Private Sub mnuSettingAnnounce_Click(sender As Object, e As EventArgs) Handles mnuSettingAnnounce.Click
         frmAnnounce.ShowDialog()
-        RetrieveSettings(0)
+        getAnnounceSettings()
     End Sub
 
     Private Sub mnuAbout_Click(sender As Object, e As EventArgs) Handles mnuAbout.Click
@@ -884,12 +882,6 @@ Public Class frmMain
         If index = 0 Then
             If My.Settings.Previous IsNot Nothing Then
                 settings = My.Settings.Previous
-            End If
-            If My.Settings.AnnounceBefore <> Nothing Then
-                announceBefore = My.Settings.AnnounceBefore
-            Else
-                My.Settings.AnnounceBefore = 0
-                announceBefore = 0
             End If
             retrieveFavName(index)
         ElseIf index = 1 Then
@@ -1478,6 +1470,15 @@ Public Class frmMain
         Return logistic
     End Function
 
+    Private Sub getAnnounceSettings()
+        If My.Settings.AnnounceBefore <> Nothing Then
+            announceBefore = My.Settings.AnnounceBefore
+        Else
+            My.Settings.AnnounceBefore = 0
+            announceBefore = 0
+        End If
+    End Sub
+
     Public Sub setFavoriteName(_favName As String)
         favName = _favName
     End Sub
@@ -1514,6 +1515,13 @@ Public Class frmMain
         btnSaveFavorite.Enabled = False
     End Sub
 
+    Private Sub updateNotifyIconText()
+        NotifyIcon5.Text =
+            "#1  " & currentTime1 & vbNewLine &
+            "#2  " & currentTime2 & vbNewLine &
+            "#3  " & currentTime3 & vbNewLine &
+            "#4  " & currentTime4 & vbNewLine
+    End Sub
     ' Save to settings
     Private Sub saveLogistic(index As Integer)
         Dim logistic1 As String = ""

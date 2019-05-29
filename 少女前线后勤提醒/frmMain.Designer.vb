@@ -919,7 +919,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.cboName2)
         Me.Controls.Add(Me.cboName1)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Cursor = System.Windows.Forms.Cursors.Arrow
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.Name = "frmMain"

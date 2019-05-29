@@ -28,6 +28,9 @@ Partial Class FrmAbout
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.btnLeave = New System.Windows.Forms.Button()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.SuspendLayout()
         '
         'Label1
@@ -64,9 +67,9 @@ Partial Class FrmAbout
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
         Me.Label4.Location = New System.Drawing.Point(16, 184)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(314, 51)
+        Me.Label4.Size = New System.Drawing.Size(314, 48)
         Me.Label4.TabIndex = 3
-        Me.Label4.Text = "Github链接：" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "NGA 帖子：" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "开发者：九重奏（LuxuriaGK)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label4.Text = "Github链接：" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "NGA 帖子：" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Label5
         '
@@ -80,6 +83,7 @@ Partial Class FrmAbout
         '
         'btnLeave
         '
+        Me.btnLeave.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
         Me.btnLeave.Location = New System.Drawing.Point(416, 235)
         Me.btnLeave.Name = "btnLeave"
         Me.btnLeave.Size = New System.Drawing.Size(64, 26)
@@ -87,11 +91,44 @@ Partial Class FrmAbout
         Me.btnLeave.Text = "离开"
         Me.btnLeave.UseVisualStyleBackColor = True
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
+        Me.LinkLabel1.Location = New System.Drawing.Point(97, 184)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(277, 16)
+        Me.LinkLabel1.TabIndex = 6
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "https://github.com/Luxuriagk/LogisticManager"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
+        Me.Label6.Location = New System.Drawing.Point(16, 218)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(239, 16)
+        Me.Label6.TabIndex = 7
+        Me.Label6.Text = "Pixiv作者ID（封面图HK416）： 1522108"
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
+        Me.LinkLabel2.Location = New System.Drawing.Point(90, 200)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(0, 16)
+        Me.LinkLabel2.TabIndex = 6
+        '
         'FrmAbout
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(493, 273)
+        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.LinkLabel2)
+        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.btnLeave)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
@@ -105,6 +142,7 @@ Partial Class FrmAbout
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "关于"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -114,4 +152,7 @@ Partial Class FrmAbout
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents btnLeave As Button
+    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents Label6 As Label
+    Friend WithEvents LinkLabel2 As LinkLabel
 End Class
