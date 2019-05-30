@@ -120,6 +120,12 @@
     <Compile Include="frmFavoriteName.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmLogisticView.Designer.vb">
+      <DependentUpon>frmLogisticView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogisticView.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,7 @@
       <DependentUpon>frmMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LogisticCalculation.vb" />
     <Compile Include="LogisticSupport.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -156,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmFavoriteName.resx">
       <DependentUpon>frmFavoriteName.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogisticView.resx">
+      <DependentUpon>frmLogisticView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>

@@ -98,6 +98,7 @@ Partial Class frmMain
         Me.Label20 = New System.Windows.Forms.Label()
         Me.btnSaveFavorite = New System.Windows.Forms.Button()
         Me.PictureBox14 = New System.Windows.Forms.PictureBox()
+        Me.mnuViewLogistic = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picReset3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picReset4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picReset2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -476,7 +477,7 @@ Partial Class frmMain
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSetting, Me.mnuAbout})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSetting, Me.mnuViewLogistic, Me.mnuAbout})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(7, 3, 0, 3)
@@ -855,6 +856,12 @@ Partial Class frmMain
         Me.PictureBox14.TabIndex = 42
         Me.PictureBox14.TabStop = False
         '
+        'mnuViewLogistic
+        '
+        Me.mnuViewLogistic.Name = "mnuViewLogistic"
+        Me.mnuViewLogistic.Size = New System.Drawing.Size(69, 19)
+        Me.mnuViewLogistic.Text = "后勤查询"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1029,4 +1036,5 @@ Partial Class frmMain
     Friend WithEvents Label20 As Label
     Friend WithEvents btnSaveFavorite As Button
     Friend WithEvents PictureBox14 As PictureBox
+    Friend WithEvents mnuViewLogistic As ToolStripMenuItem
 End Class
