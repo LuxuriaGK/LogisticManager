@@ -112,12 +112,84 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property AnnounceBefore() As Integer
+        Public Property BeforeMinute() As Integer
             Get
-                Return CType(Me("AnnounceBefore"),Integer)
+                Return CType(Me("BeforeMinute"),Integer)
             End Get
             Set
-                Me("AnnounceBefore") = value
+                Me("BeforeMinute") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property ExitSettings() As Boolean
+            Get
+                Return CType(Me("ExitSettings"),Boolean)
+            End Get
+            Set
+                Me("ExitSettings") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property TopMost() As Boolean
+            Get
+                Return CType(Me("TopMost"),Boolean)
+            End Get
+            Set
+                Me("TopMost") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property BeforeSecond() As Integer
+            Get
+                Return CType(Me("BeforeSecond"),Integer)
+            End Get
+            Set
+                Me("BeforeSecond") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property DontAskAgain() As Boolean
+            Get
+                Return CType(Me("DontAskAgain"),Boolean)
+            End Get
+            Set
+                Me("DontAskAgain") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property AutoRestart() As Boolean
+            Get
+                Return CType(Me("AutoRestart"),Boolean)
+            End Get
+            Set
+                Me("AutoRestart") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property Popup() As Boolean
+            Get
+                Return CType(Me("Popup"),Boolean)
+            End Get
+            Set
+                Me("Popup") = value
             End Set
         End Property
     End Class

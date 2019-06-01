@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class 后勤查询
+Partial Class frmLogisticView
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.

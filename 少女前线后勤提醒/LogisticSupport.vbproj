@@ -14,6 +14,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -81,6 +81,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="WPF.Notifier, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPF.Notifier.1.2\lib\net35\WPF.Notifier.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -96,6 +99,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmEditTime.Designer.vb">
+      <DependentUpon>frmEditTime.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEditTime.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmExit.Designer.vb">
       <DependentUpon>frmExit.vb</DependentUpon>
     </Compile>
@@ -106,12 +115,6 @@
       <DependentUpon>frmAbout.vb</DependentUpon>
     </Compile>
     <Compile Include="frmAbout.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAnnounce.Designer.vb">
-      <DependentUpon>frmAnnounce.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmAnnounce.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmFavoriteName.Designer.vb">
@@ -131,6 +134,30 @@
     </Compile>
     <Compile Include="frmMain.Designer.vb">
       <DependentUpon>frmMain.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMsgBox.Designer.vb">
+      <DependentUpon>frmMsgBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMsgBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNotification.Designer.vb">
+      <DependentUpon>frmNotification.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNotification.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQRCode.Designer.vb">
+      <DependentUpon>frmQRCode.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmQRCode.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.vb">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LogisticCalculation.vb" />
@@ -155,8 +182,8 @@
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAnnounce.resx">
-      <DependentUpon>frmAnnounce.vb</DependentUpon>
+    <EmbeddedResource Include="frmEditTime.resx">
+      <DependentUpon>frmEditTime.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmExit.resx">
       <DependentUpon>frmExit.vb</DependentUpon>
@@ -169,6 +196,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMsgBox.resx">
+      <DependentUpon>frmMsgBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNotification.resx">
+      <DependentUpon>frmNotification.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQRCode.resx">
+      <DependentUpon>frmQRCode.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -190,6 +229,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -223,10 +263,25 @@
     <None Include="Resources\hk416_maid.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\button_grey_hover.png" />
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\button_red_hover.png" />
+    <None Include="Resources\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit_grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\807792456.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ro635.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\G11_sound.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

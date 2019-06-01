@@ -17,4 +17,8 @@
         Icon = My.Resources.icon
         LinkLabel2.Text = "https://bbs.nga.cn/read.php?tid=17404670&_ff=-547859"
     End Sub
+
+    Private Sub lblQRcode_Click(sender As Object, e As EventArgs) Handles lblQRcode.Click
+        frmQRCode.Show()
+    End Sub
 End Class

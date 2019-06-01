@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FrmAbout
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FrmAbout
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -31,6 +31,8 @@ Partial Class FrmAbout
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.lblQRcode = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -49,8 +51,8 @@ Partial Class FrmAbout
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(468, 101)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "大家好这里是九重奏，虽然这个软件制作花费时间不长但是还是希望各位能多多支持！" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "如果可以的话就推荐给好友或者帮忙宣传，让更多人知道有这么一款辅助器可以解决他们的在" &
-    "少前里所遇到困难。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "你的支持是我最大的动力！只要我还在玩少前就会一直更新下去！" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.Label2.Text = "大家好这里是九重奏，制作软件不易，希望各位能多多支持！" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "如果可以的话就推荐给好友或者帮忙宣传，让更多人知道有这么一款辅助器可以解决他们的在少前里所遇到困难。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) &
+    "你的支持是我最大的动力！只要我还在玩少前就会一直更新下去！" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Label3
         '
@@ -74,7 +76,7 @@ Partial Class FrmAbout
         'Label5
         '
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Underline)
-        Me.Label5.ForeColor = System.Drawing.Color.DodgerBlue
+        Me.Label5.ForeColor = System.Drawing.Color.Orange
         Me.Label5.Location = New System.Drawing.Point(12, 39)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(55, 23)
@@ -84,7 +86,7 @@ Partial Class FrmAbout
         'btnLeave
         '
         Me.btnLeave.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.25!)
-        Me.btnLeave.Location = New System.Drawing.Point(416, 235)
+        Me.btnLeave.Location = New System.Drawing.Point(416, 234)
         Me.btnLeave.Name = "btnLeave"
         Me.btnLeave.Size = New System.Drawing.Size(64, 26)
         Me.btnLeave.TabIndex = 5
@@ -121,11 +123,35 @@ Partial Class FrmAbout
         Me.LinkLabel2.Size = New System.Drawing.Size(0, 16)
         Me.LinkLabel2.TabIndex = 6
         '
+        'lblQRcode
+        '
+        Me.lblQRcode.AutoSize = True
+        Me.lblQRcode.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.lblQRcode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblQRcode.ForeColor = System.Drawing.Color.Blue
+        Me.lblQRcode.Location = New System.Drawing.Point(12, 136)
+        Me.lblQRcode.Name = "lblQRcode"
+        Me.lblQRcode.Size = New System.Drawing.Size(113, 16)
+        Me.lblQRcode.TabIndex = 8
+        Me.lblQRcode.Text = "点击赞赏作者～"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.ForeColor = System.Drawing.SystemColors.ControlDark
+        Me.Label7.Location = New System.Drawing.Point(121, 138)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(145, 13)
+        Me.Label7.TabIndex = 9
+        Me.Label7.Text = "(有能力的就支持一下吧～)"
+        '
         'FrmAbout
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(493, 273)
+        Me.ClientSize = New System.Drawing.Size(493, 272)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.lblQRcode)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.LinkLabel2)
         Me.Controls.Add(Me.LinkLabel1)
@@ -155,4 +181,6 @@ Partial Class FrmAbout
     Friend WithEvents LinkLabel1 As LinkLabel
     Friend WithEvents Label6 As Label
     Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents lblQRcode As Label
+    Friend WithEvents Label7 As Label
 End Class

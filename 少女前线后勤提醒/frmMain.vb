@@ -3,21 +3,22 @@
 Public Class frmMain
     ' ToDo List
     ' UI improve
-    ' about page
-    ' add sound (v2 maybe)
+    ' add sound
     ' remember to set 0-1 time to 00:50
     ' skill training time announce
-    ' memory control
-    ' check all logistic
     ' result check
     ' select one or two type of resources
+    ' editable time
+
 
     Public arr_Logistic(60) As LogisticSupport
-    Dim TargetDT1 As DateTime
-    Dim TargetDT2 As DateTime
-    Dim TargetDT3 As DateTime
-    Dim TargetDT4 As DateTime
-    Dim announceBefore As Integer
+    Public TargetDT1 As DateTime
+    Public TargetDT2 As DateTime
+    Public TargetDT3 As DateTime
+    Public TargetDT4 As DateTime
+
+    Dim beforeMinute As Integer
+    Dim beforeSecond As Integer
 
     Dim notified1 As Boolean
     Dim notified2 As Boolean
@@ -104,41 +105,26 @@ Public Class frmMain
         InsertLogistic()
         init()
         RetrieveSettings(0)
-        getAnnounceSettings()
+        Me.Hide()
     End Sub
 
     Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        Dim dlgResult As DialogResult = frmExit.ShowDialog
+        Dim quit As Boolean = False
 
-        If dlgResult = DialogResult.No Then
-            saveLogistic(0)
-
-            NotifyIcon1.Icon = Nothing
-            NotifyIcon1.Visible = False
-            NotifyIcon1.Dispose()
-            NotifyIcon2.Icon = Nothing
-            NotifyIcon2.Visible = False
-            NotifyIcon2.Dispose()
-            NotifyIcon3.Icon = Nothing
-            NotifyIcon3.Visible = False
-            NotifyIcon3.Dispose()
-            NotifyIcon4.Icon = Nothing
-            NotifyIcon4.Visible = False
-            NotifyIcon4.Dispose()
-            NotifyIcon5.Icon = Nothing
-            NotifyIcon5.Visible = False
-            NotifyIcon5.Dispose()
-        ElseIf dlgResult = DialogResult.Yes Then
-            WindowState = FormWindowState.Minimized
-            e.Cancel = True
-            NotifyIcon5.Visible = True
-            NotifyIcon5.Icon = My.Resources.icon
-            NotifyIcon5.BalloonTipTitle = "后勤提醒"
-            NotifyIcon5.BalloonTipText = "已最小化到托盘"
-            NotifyIcon5.ShowBalloonTip(10000)
-            ShowInTaskbar = False
+        If My.Settings.DontAskAgain = False Then
+            Dim dlgResult As DialogResult = frmExit.ShowDialog
+            If dlgResult = DialogResult.Yes Then
+                quit = False
+                exitForm(quit, e)
+            ElseIf dlgResult = DialogResult.No Then
+                quit = True
+                exitForm(quit, e)
+            Else
+                e.Cancel = True
+            End If
         Else
-            e.Cancel = True
+            quit = My.Settings.ExitSettings
+            exitForm(quit, e)
         End If
     End Sub
 
@@ -170,166 +156,28 @@ Public Class frmMain
         Me.Icon = My.Resources.icon
     End Sub
 
-    ' Combo box event
-    Private Sub cboName1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName1.SelectedIndexChanged
-        Timer1.Stop()
-        picStart1.Visible = True
-        picStart1.Enabled = True
-        picReset1.Visible = False
-        picReset1.Enabled = False
+    Private Sub exitForm(quit As Boolean, ByRef e As FormClosingEventArgs)
+        If quit Then
+            saveLogistic(0)
 
-        If cboName1.SelectedIndex <> -1 Then
-            Dim logistic As LogisticSupport = getLogistic(cboName1.SelectedItem.ToString)
-
-            lblTime1.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
-            lblHour1.Text = logistic.getTime().ToString
-        End If
-    End Sub
-
-    Private Sub cboName2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName2.SelectedIndexChanged
-        Timer2.Stop()
-        picStart2.Visible = True
-        picStart2.Enabled = True
-        picReset2.Visible = False
-        picReset2.Enabled = False
-
-        If cboName2.SelectedIndex <> -1 Then
-            Dim logistic As LogisticSupport = getLogistic(cboName2.SelectedItem.ToString)
-
-            lblTime2.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
-            lblHour2.Text = logistic.getTime().ToString
-        End If
-    End Sub
-
-    Private Sub cboName3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName3.SelectedIndexChanged
-        Timer3.Stop()
-        picStart3.Visible = True
-        picStart3.Enabled = True
-        picReset3.Visible = False
-        picReset3.Enabled = False
-
-        If cboName3.SelectedIndex <> -1 Then
-            Dim logistic As LogisticSupport = getLogistic(cboName3.SelectedItem.ToString)
-
-            lblTime3.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
-            lblHour3.Text = logistic.getTime().ToString
-        End If
-    End Sub
-
-    Private Sub cboName4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName4.SelectedIndexChanged
-        Timer4.Stop()
-        picStart4.Visible = True
-        picStart4.Enabled = True
-        picReset4.Visible = False
-        picReset4.Enabled = False
-
-        If cboName4.SelectedIndex <> -1 Then
-            Dim logistic As LogisticSupport = getLogistic(cboName4.SelectedItem.ToString)
-
-            lblTime4.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
-            lblHour4.Text = logistic.getTime().ToString
-        End If
-    End Sub
-
-    ' Timer
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        Dim ts As TimeSpan = TargetDT1.Subtract(DateTime.Now)
-        currentTime1 = ts.ToString("hh\:mm\:ss")
-
-        If lblTime1.Text = "00:" + announceBefore.ToString("D2") + ":00" And notified1 = False Then
-            Notify(1, cboName1.SelectedItem.ToString)
-            notified1 = True
-        End If
-
-        If ts.TotalMilliseconds > 0 Then
-            lblTime1.Text = currentTime1
+            NotifyIcon5.Icon = Nothing
+            NotifyIcon5.Visible = False
+            NotifyIcon5.Dispose()
         Else
-            lblTime1.Text = ("00:00:00")
-            Timer1.Stop()
-            currentTime1 = ("00:00:00")
-            picReset1_Click(Nothing, Nothing)
-            If restartMission(1, cboName1.SelectedItem.ToString) Then
-                picStart1_Click(Nothing, Nothing)
+            Me.Visible = False
+            Opacity = 0
+            e.Cancel = True
+            NotifyIcon5.Visible = True
+            NotifyIcon5.Icon = My.Resources.icon
+            ShowInTaskbar = False
+            If frmNotification.open = True Then
+                Threading.Thread.Sleep(2000)
             End If
-            NotifyIcon1.Visible = False
-            NotifyIcon1.Icon = Nothing
+            frmNotification.counter = 0
+            frmNotification.Opacity = 1
+            frmNotification.sendOthersNotification("已最小化至托盘", "少女前线后勤管理")
+            frmNotification.Show()
         End If
-        updateNotifyIconText()
-    End Sub
-
-    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
-        Dim ts As TimeSpan = TargetDT2.Subtract(DateTime.Now)
-        currentTime2 = ts.ToString("hh\:mm\:ss")
-
-        If lblTime2.Text = "00:" + announceBefore.ToString("D2") + ":00" And notified2 = False Then
-            Notify(2, cboName2.SelectedItem.ToString)
-            notified2 = True
-        End If
-
-        If ts.TotalMilliseconds > 0 Then
-            lblTime2.Text = currentTime2
-        Else
-            lblTime2.Text = ("00:00:00")
-            Timer2.Stop()
-            currentTime2 = ("00:00:00")
-            picReset2_Click(Nothing, Nothing)
-            If restartMission(2, cboName2.SelectedItem.ToString) Then
-                picStart2_Click(Nothing, Nothing)
-            End If
-            NotifyIcon2.Visible = False
-            NotifyIcon2.Icon = Nothing
-        End If
-        updateNotifyIconText()
-    End Sub
-
-    Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles Timer3.Tick
-        Dim ts As TimeSpan = TargetDT3.Subtract(DateTime.Now)
-        currentTime3 = ts.ToString("hh\:mm\:ss")
-
-        If lblTime3.Text = "00:" + announceBefore.ToString("D2") + ":00" And notified3 = False Then
-            Notify(3, cboName3.SelectedItem.ToString)
-            notified3 = True
-        End If
-
-        If ts.TotalMilliseconds > 0 Then
-            lblTime3.Text = currentTime3
-        Else
-            lblTime3.Text = ("00:00:00")
-            Timer3.Stop()
-            currentTime3 = ("00:00:00")
-            picReset3_Click(Nothing, Nothing)
-            If restartMission(3, cboName3.SelectedItem.ToString) Then
-                picStart3_Click(Nothing, Nothing)
-            End If
-            NotifyIcon3.Visible = False
-            NotifyIcon3.Icon = Nothing
-        End If
-        updateNotifyIconText()
-    End Sub
-
-    Private Sub Timer4_Tick(sender As Object, e As EventArgs) Handles Timer4.Tick
-        Dim ts As TimeSpan = TargetDT4.Subtract(DateTime.Now)
-        currentTime4 = ts.ToString("hh\:mm\:ss")
-
-        If lblTime4.Text = "00:" + announceBefore.ToString("D2") + ":00" And notified4 = False Then
-            Notify(4, cboName4.SelectedItem.ToString)
-            notified4 = True
-        End If
-
-        If ts.TotalMilliseconds > 0 Then
-            lblTime4.Text = currentTime4
-        Else
-            lblTime4.Text = ("00:00:00")
-            Timer4.Stop()
-            currentTime4 = ("00:00:00")
-            picReset4_Click(Nothing, Nothing)
-            If restartMission(4, cboName4.SelectedItem.ToString) Then
-                picStart4_Click(Nothing, Nothing)
-            End If
-            NotifyIcon4.Visible = False
-            NotifyIcon4.Icon = Nothing
-        End If
-        updateNotifyIconText()
     End Sub
 
     ' Button Click Event
@@ -349,20 +197,17 @@ Public Class frmMain
             If favClicked1 = True Then
                 Label17.Text = favName
                 saveLogistic(1)
-                MessageBox.Show("[" & favName & "] 已保存", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf favClicked2 = True Then
                 Label18.Text = favName
                 saveLogistic(2)
-                MessageBox.Show("[" & favName & "]已保存", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf favClicked3 = True Then
                 Label19.Text = favName
                 saveLogistic(3)
-                MessageBox.Show("[" & favName & "]已保存", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf favClicked4 = True Then
                 Label20.Text = favName
                 saveLogistic(4)
-                MessageBox.Show("[" & favName & "]已保存", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
+            MessageBox.Show("[" & favName & "]已保存", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             MessageBox.Show("自定义后勤尚未保存", "", MessageBoxButtons.OK, MessageBoxIcon.Stop)
         End If
@@ -403,88 +248,6 @@ Public Class frmMain
         End If
     End Sub
 
-    ' Start and Stop button click event
-    Private Sub picStart1_Click(sender As Object, e As EventArgs) Handles picStart1.Click
-        notified1 = False
-        If cboName1.SelectedIndex <> -1 Then
-            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour1.Text))
-
-            Timer1.Interval = 50
-            TargetDT1 = DateTime.Now.Add(CountDownFrom)
-            Timer1.Start()
-
-            picStart1.Visible = False
-            picStart1.Enabled = False
-            picReset1.Visible = True
-            picReset1.Enabled = True
-        End If
-    End Sub
-
-    Private Sub picStart2_Click(sender As Object, e As EventArgs) Handles picStart2.Click
-        If cboName2.SelectedIndex <> -1 Then
-            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour2.Text))
-
-            Timer2.Interval = 50
-            TargetDT2 = DateTime.Now.Add(CountDownFrom)
-            Timer2.Start()
-
-            picStart2.Visible = False
-            picStart2.Enabled = False
-            picReset2.Visible = True
-            picReset2.Enabled = True
-        End If
-    End Sub
-
-    Private Sub picStart3_Click(sender As Object, e As EventArgs) Handles picStart3.Click
-        If cboName3.SelectedIndex <> -1 Then
-            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour3.Text))
-
-            Timer3.Interval = 50
-            TargetDT3 = DateTime.Now.Add(CountDownFrom)
-            Timer3.Start()
-
-            picStart3.Visible = False
-            picStart3.Enabled = False
-            picReset3.Visible = True
-            picReset3.Enabled = True
-        End If
-    End Sub
-
-    Private Sub picStart4_Click(sender As Object, e As EventArgs) Handles picStart4.Click
-        If cboName4.SelectedIndex <> -1 Then
-            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour4.Text))
-
-            Timer4.Interval = 50
-            TargetDT4 = DateTime.Now.Add(CountDownFrom)
-            Timer4.Start()
-
-            picStart4.Visible = False
-            picStart4.Enabled = False
-            picReset4.Visible = True
-            picReset4.Enabled = True
-        End If
-    End Sub
-
-    Private Sub picReset1_Click(sender As Object, e As EventArgs) Handles picReset1.Click
-        Timer1.Stop()
-        cboName1_SelectedIndexChanged(Nothing, Nothing)
-    End Sub
-
-    Private Sub picReset2_Click(sender As Object, e As EventArgs) Handles picReset2.Click
-        Timer2.Stop()
-        cboName2_SelectedIndexChanged(Nothing, Nothing)
-    End Sub
-
-    Private Sub picReset3_Click(sender As Object, e As EventArgs) Handles picReset3.Click
-        Timer3.Stop()
-        cboName3_SelectedIndexChanged(Nothing, Nothing)
-    End Sub
-
-    Private Sub picReset4_Click(sender As Object, e As EventArgs) Handles picReset4.Click
-        Timer4.Stop()
-        cboName4_SelectedIndexChanged(Nothing, Nothing)
-    End Sub
-
     ' Menu Strip click event
     Private Sub ctxExit_Click(sender As Object, e As EventArgs) Handles ctxExit.Click
         End
@@ -494,38 +257,43 @@ Public Class frmMain
         NotifyIcon5_DoubleClick(Nothing, Nothing)
     End Sub
 
-    Private Sub mnuSettingAnnounce_Click(sender As Object, e As EventArgs) Handles mnuSettingAnnounce.Click
-        frmAnnounce.ShowDialog()
-        getAnnounceSettings()
-    End Sub
-
     Private Sub mnuAbout_Click(sender As Object, e As EventArgs) Handles mnuAbout.Click
         FrmAbout.ShowDialog()
+    End Sub
+
+    Private Sub mnuSetting_Click(sender As Object, e As EventArgs) Handles mnuSetting.Click
+        Dim dlgResult As DialogResult = frmSettings.ShowDialog()
+    End Sub
+
+    Private Sub mnuViewLogistic_Click(sender As Object, e As EventArgs) Handles mnuViewLogistic.Click
+        frmLogisticView.Show()
     End Sub
 
     ' Resources Button Click Event
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click, Label6.Click
         If manpowerClicked = False Then
-            uncheckOthers()
-            PictureBox1.Image = My.Resources.button_red
-            manpowerClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-2" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox1.Image = My.Resources.button_red
+                manpowerClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-2" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "5-3" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "5-3" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "7-1" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "7-1" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "10-1" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "10-1" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
             PictureBox1.Image = My.Resources.button_grey
             manpowerClicked = False
@@ -535,26 +303,28 @@ Public Class frmMain
 
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click, Label7.Click
         If ammoClicked = False Then
-            uncheckOthers()
-            PictureBox2.Image = My.Resources.button_red
-            ammoClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "3-3" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox2.Image = My.Resources.button_red
+                ammoClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "3-3" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "5-2" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "5-2" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "10-1" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "10-1" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "11-1" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "11-1" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
             PictureBox2.Image = My.Resources.button_grey
             ammoClicked = False
@@ -564,27 +334,29 @@ Public Class frmMain
 
     Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click, Label8.Click
         If rationClicked = False Then
-            uncheckOthers()
-            PictureBox3.Image = My.Resources.button_red
-            rationClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "3-1" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox3.Image = My.Resources.button_red
+                rationClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "3-1" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
 
-                If cboName2.Items(i).ToString = "5-1" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "5-1" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "7-1" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "7-1" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "9-1" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "9-1" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
             PictureBox3.Image = My.Resources.button_grey
             rationClicked = False
@@ -594,26 +366,28 @@ Public Class frmMain
 
     Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click, Label9.Click
         If partClicked = False Then
-            uncheckOthers()
-            PictureBox4.Image = My.Resources.button_red
-            partClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-2" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox4.Image = My.Resources.button_red
+                partClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-2" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "4-2" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "4-2" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "8-2" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "8-2" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "9-1" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "9-1" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
             PictureBox4.Image = My.Resources.button_grey
             partClicked = False
@@ -624,28 +398,30 @@ Public Class frmMain
     ' Contract Button Click Event
     Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click, Label11.Click
         If dollClicked = False Then
-            uncheckOthers()
-            PictureBox5.Image = My.Resources.button_red
-            dollClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-2" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox5.Image = My.Resources.button_red
+                dollClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-2" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "1-4" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "1-4" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "10-2" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "10-2" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "11-2" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "11-2" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
-            PictureBox5.Image = My.Resources.button_grey
+                PictureBox5.Image = My.Resources.button_grey
             dollClicked = False
             clear()
         End If
@@ -653,28 +429,30 @@ Public Class frmMain
 
     Private Sub PictureBox6_Click(sender As Object, e As EventArgs) Handles PictureBox6.Click, Label12.Click
         If equipmentClicked = False Then
-            uncheckOthers()
-            PictureBox6.Image = My.Resources.button_red
-            equipmentClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "4-1" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox6.Image = My.Resources.button_red
+                equipmentClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "4-1" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "5-3" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "5-3" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "8-1" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "8-1" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "11-1" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "11-1" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
-            PictureBox6.Image = My.Resources.button_grey
+                PictureBox6.Image = My.Resources.button_grey
             equipmentClicked = False
             clear()
         End If
@@ -682,28 +460,30 @@ Public Class frmMain
 
     Private Sub PictureBox7_Click(sender As Object, e As EventArgs) Handles PictureBox7.Click, Label13.Click
         If productionClicked = False Then
-            uncheckOthers()
-            PictureBox7.Image = My.Resources.button_red
-            productionClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-1" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox7.Image = My.Resources.button_red
+                productionClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-1" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "3-3" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "3-3" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "4-2" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "4-2" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "9-2" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "9-2" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
-            PictureBox7.Image = My.Resources.button_grey
+                PictureBox7.Image = My.Resources.button_grey
             productionClicked = False
             clear()
         End If
@@ -711,28 +491,30 @@ Public Class frmMain
 
     Private Sub PictureBox8_Click(sender As Object, e As EventArgs) Handles PictureBox8.Click, Label14.Click
         If restoreClicked = False Then
-            uncheckOthers()
-            PictureBox8.Image = My.Resources.button_red
-            restoreClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-1" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox8.Image = My.Resources.button_red
+                restoreClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-1" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "1-3" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "1-3" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                If cboName3.Items(i).ToString = "2-2" Then
-                    cboName3.SelectedIndex = i
-                End If
+                    If cboName3.Items(i).ToString = "2-2" Then
+                        cboName3.SelectedIndex = i
+                    End If
 
-                If cboName4.Items(i).ToString = "3-3" Then
-                    cboName4.SelectedIndex = i
-                End If
-            Next i
+                    If cboName4.Items(i).ToString = "3-3" Then
+                        cboName4.SelectedIndex = i
+                    End If
+                Next i
+            End If
         Else
-            PictureBox8.Image = My.Resources.button_grey
+                PictureBox8.Image = My.Resources.button_grey
             restoreClicked = False
             clear()
         End If
@@ -740,21 +522,23 @@ Public Class frmMain
 
     Private Sub PictureBox9_Click(sender As Object, e As EventArgs) Handles PictureBox9.Click, Label15.Click
         If tokenClicked = False Then
-            uncheckOthers()
-            PictureBox9.Image = My.Resources.button_red
-            tokenClicked = True
-            For i = 0 To cboName1.Items.Count - 1
-                If cboName1.Items(i).ToString = "0-4" Then
-                    cboName1.SelectedIndex = i
-                End If
+            If changeLogisticList() Then
+                uncheckOthers()
+                PictureBox9.Image = My.Resources.button_red
+                tokenClicked = True
+                For i = 0 To cboName1.Items.Count - 1
+                    If cboName1.Items(i).ToString = "0-4" Then
+                        cboName1.SelectedIndex = i
+                    End If
 
-                If cboName2.Items(i).ToString = "6-4" Then
-                    cboName2.SelectedIndex = i
-                End If
+                    If cboName2.Items(i).ToString = "6-4" Then
+                        cboName2.SelectedIndex = i
+                    End If
 
-                cboName3.SelectedIndex = -1
-                cboName4.SelectedIndex = -1
-            Next i
+                    cboName3.SelectedIndex = -1
+                    cboName4.SelectedIndex = -1
+                Next i
+            End If
         Else
             PictureBox9.Image = My.Resources.button_grey
             tokenClicked = False
@@ -764,12 +548,55 @@ Public Class frmMain
 
     ' Favorite Button Click Event
     Private Sub PictureBox10_Click(sender As Object, e As EventArgs) Handles PictureBox10.Click, Label17.Click
+        Dim selectIndex As Integer() = {cboName1.SelectedIndex, cboName2.SelectedIndex, cboName3.SelectedIndex, cboName4.SelectedIndex}
+
         If favClicked1 = False Then
-            uncheckOthers()
-            PictureBox10.Image = My.Resources.button_red
-            favClicked1 = True
-            RetrieveSettings(1)
-            btnSaveFavorite.Enabled = True
+            If selectIndex(0) <> -1 Or selectIndex(1) <> -1 Or selectIndex(2) <> -1 Or selectIndex(3) <> -1 Then
+                If My.Settings.Favorite1 IsNot Nothing Then
+                    frmMsgBox.title = "替换后勤"
+                    frmMsgBox.content = "当前已选择的后勤将替换成" & vbNewLine & "[" & Label17.Text & "]的后勤列表，是否替换？" & vbNewLine & "(所有计时将会重置)"
+                    frmMsgBox.btnYesString = "替换"
+                    frmMsgBox.btnNoString = "保留"
+
+                    Dim dlg As DialogResult = frmMsgBox.ShowDialog()
+                    If dlg = DialogResult.Yes Then
+                        uncheckOthers()
+                        RetrieveSettings(1)
+                        PictureBox10.Image = My.Resources.button_red
+                        favClicked1 = True
+                        btnSaveFavorite.Enabled = True
+                    ElseIf dlg = DialogResult.No Then
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                        PictureBox10.Image = My.Resources.button_red
+                        favClicked1 = True
+                        btnSaveFavorite.Enabled = True
+                    Else
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                    End If
+                Else
+                    uncheckOthers()
+                    cboName1.SelectedIndex = selectIndex(0)
+                    cboName2.SelectedIndex = selectIndex(1)
+                    cboName3.SelectedIndex = selectIndex(2)
+                    cboName4.SelectedIndex = selectIndex(3)
+                    PictureBox10.Image = My.Resources.button_red
+                    favClicked1 = True
+                    btnSaveFavorite.Enabled = True
+                End If
+            Else
+                RetrieveSettings(1)
+                PictureBox10.Image = My.Resources.button_red
+                favClicked1 = True
+                btnSaveFavorite.Enabled = True
+            End If
         Else
             PictureBox10.Image = My.Resources.button_grey
             favClicked1 = False
@@ -779,12 +606,57 @@ Public Class frmMain
     End Sub
 
     Private Sub PictureBox11_Click(sender As Object, e As EventArgs) Handles PictureBox11.Click, Label18.Click
+        Dim selectIndex As Integer() = {cboName1.SelectedIndex, cboName2.SelectedIndex, cboName3.SelectedIndex, cboName4.SelectedIndex}
+
         If favClicked2 = False Then
-            uncheckOthers()
-            PictureBox11.Image = My.Resources.button_red
-            favClicked2 = True
-            RetrieveSettings(2)
-            btnSaveFavorite.Enabled = True
+            If selectIndex(0) <> -1 Or selectIndex(1) <> -1 Or selectIndex(2) <> -1 Or selectIndex(3) <> -1 Then
+                If My.Settings.Favorite2 IsNot Nothing Then
+                    frmMsgBox.title = "替换后勤"
+                    frmMsgBox.content = "当前已选择的后勤将替换成" & vbNewLine & "[" & Label18.Text & "]的后勤列表，是否替换？" & vbNewLine & "(所有计时将会重置)"
+                    frmMsgBox.btnYesString = "替换"
+                    frmMsgBox.btnNoString = "保留"
+
+                    Dim dlg As DialogResult = frmMsgBox.ShowDialog()
+
+                    If dlg = DialogResult.Yes Then
+                        uncheckOthers()
+                        RetrieveSettings(2)
+                        PictureBox11.Image = My.Resources.button_red
+                        favClicked2 = True
+                        btnSaveFavorite.Enabled = True
+                    ElseIf dlg = DialogResult.No Then
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                        PictureBox11.Image = My.Resources.button_red
+                        favClicked2 = True
+                        btnSaveFavorite.Enabled = True
+                    Else
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                    End If
+                Else
+                    uncheckOthers()
+                    cboName1.SelectedIndex = selectIndex(0)
+                    cboName2.SelectedIndex = selectIndex(1)
+                    cboName3.SelectedIndex = selectIndex(2)
+                    cboName4.SelectedIndex = selectIndex(3)
+                    PictureBox11.Image = My.Resources.button_red
+                    favClicked2 = True
+                    btnSaveFavorite.Enabled = True
+                End If
+            Else
+                uncheckOthers()
+                RetrieveSettings(2)
+                PictureBox11.Image = My.Resources.button_red
+                favClicked2 = True
+                btnSaveFavorite.Enabled = True
+            End If
         Else
             PictureBox11.Image = My.Resources.button_grey
             favClicked2 = False
@@ -794,12 +666,57 @@ Public Class frmMain
     End Sub
 
     Private Sub PictureBox12_Click(sender As Object, e As EventArgs) Handles PictureBox12.Click, Label19.Click
+        Dim selectIndex As Integer() = {cboName1.SelectedIndex, cboName2.SelectedIndex, cboName3.SelectedIndex, cboName4.SelectedIndex}
+
         If favClicked3 = False Then
-            uncheckOthers()
-            PictureBox12.Image = My.Resources.button_red
-            favClicked3 = True
-            RetrieveSettings(3)
-            btnSaveFavorite.Enabled = True
+            If selectIndex(0) <> -1 Or selectIndex(1) <> -1 Or selectIndex(2) <> -1 Or selectIndex(3) <> -1 Then
+                If My.Settings.Favorite3 IsNot Nothing Then
+                    frmMsgBox.title = "替换后勤"
+                    frmMsgBox.content = "当前已选择的后勤将替换成" & vbNewLine & "[" & Label18.Text & "]的后勤列表，是否替换？" & vbNewLine & "(所有计时将会重置)"
+                    frmMsgBox.btnYesString = "替换"
+                    frmMsgBox.btnNoString = "保留"
+
+                    Dim dlg As DialogResult = frmMsgBox.ShowDialog()
+                    uncheckOthers()
+                    If dlg = DialogResult.Yes Then
+                        uncheckOthers()
+                        RetrieveSettings(3)
+                        PictureBox12.Image = My.Resources.button_red
+                        favClicked3 = True
+                        btnSaveFavorite.Enabled = True
+                    ElseIf dlg = DialogResult.No Then
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                        PictureBox12.Image = My.Resources.button_red
+                        favClicked3 = True
+                        btnSaveFavorite.Enabled = True
+                    Else
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                    End If
+                Else
+                    uncheckOthers()
+                    cboName1.SelectedIndex = selectIndex(0)
+                    cboName2.SelectedIndex = selectIndex(1)
+                    cboName3.SelectedIndex = selectIndex(2)
+                    cboName4.SelectedIndex = selectIndex(3)
+                    PictureBox12.Image = My.Resources.button_red
+                    favClicked3 = True
+                    btnSaveFavorite.Enabled = True
+                End If
+            Else
+                uncheckOthers()
+                RetrieveSettings(3)
+                PictureBox12.Image = My.Resources.button_red
+                favClicked3 = True
+                btnSaveFavorite.Enabled = True
+            End If
         Else
             PictureBox12.Image = My.Resources.button_grey
             favClicked3 = False
@@ -809,13 +726,57 @@ Public Class frmMain
     End Sub
 
     Private Sub PictureBox13_Click(sender As Object, e As EventArgs) Handles PictureBox13.Click, Label20.Click
-        If favClicked4 = False Then
-            uncheckOthers()
-            PictureBox13.Image = My.Resources.button_red
-            favClicked4 = True
+        Dim selectIndex As Integer() = {cboName1.SelectedIndex, cboName2.SelectedIndex, cboName3.SelectedIndex, cboName4.SelectedIndex}
 
-            RetrieveSettings(4)
-            btnSaveFavorite.Enabled = True
+        If favClicked4 = False Then
+            If selectIndex(0) <> -1 Or selectIndex(1) <> -1 Or selectIndex(2) <> -1 Or selectIndex(3) <> -1 Then
+                If My.Settings.Favorite4 IsNot Nothing Then
+                    frmMsgBox.title = "替换后勤"
+                    frmMsgBox.content = "当前已选择的后勤将替换成" & vbNewLine & "[" & Label18.Text & "]的后勤列表，是否替换？" & vbNewLine & "(所有计时将会重置)"
+                    frmMsgBox.btnYesString = "替换"
+                    frmMsgBox.btnNoString = "保留"
+
+                    Dim dlg As DialogResult = frmMsgBox.ShowDialog()
+                    uncheckOthers()
+                    If dlg = DialogResult.Yes Then
+                        uncheckOthers()
+                        RetrieveSettings(4)
+                        PictureBox13.Image = My.Resources.button_red
+                        favClicked4 = True
+                        btnSaveFavorite.Enabled = True
+                    ElseIf dlg = DialogResult.No Then
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                        PictureBox13.Image = My.Resources.button_red
+                        favClicked4 = True
+                        btnSaveFavorite.Enabled = True
+                    Else
+                        uncheckOthers()
+                        cboName1.SelectedIndex = selectIndex(0)
+                        cboName2.SelectedIndex = selectIndex(1)
+                        cboName3.SelectedIndex = selectIndex(2)
+                        cboName4.SelectedIndex = selectIndex(3)
+                    End If
+                Else
+                    uncheckOthers()
+                    cboName1.SelectedIndex = selectIndex(0)
+                    cboName2.SelectedIndex = selectIndex(1)
+                    cboName3.SelectedIndex = selectIndex(2)
+                    cboName4.SelectedIndex = selectIndex(3)
+                    PictureBox13.Image = My.Resources.button_red
+                    favClicked4 = True
+                    btnSaveFavorite.Enabled = True
+                End If
+            Else
+                uncheckOthers()
+                RetrieveSettings(4)
+                PictureBox13.Image = My.Resources.button_red
+                favClicked4 = True
+                btnSaveFavorite.Enabled = True
+            End If
         Else
             PictureBox13.Image = My.Resources.button_grey
             favClicked4 = False
@@ -824,55 +785,326 @@ Public Class frmMain
         End If
     End Sub
 
+    ' Combo box event
+    Private Sub cboName1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName1.SelectedIndexChanged
+        Timer1.Stop()
+        picStart1.Visible = True
+        picStart1.Enabled = True
+        picReset1.Visible = False
+        picReset1.Enabled = False
+        picEdit1.Image = My.Resources.edit_grey
+        picEdit1.Enabled = False
+
+        If cboName1.SelectedIndex <> -1 Then
+            Dim logistic As LogisticSupport = getLogistic(cboName1.SelectedItem.ToString)
+
+            picEdit1.Image = My.Resources.edit
+            picEdit1.Enabled = True
+            lblTime1.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
+            lblHour1.Text = logistic.getTime().ToString
+        End If
+    End Sub
+
+    Private Sub cboName2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName2.SelectedIndexChanged
+        Timer2.Stop()
+        picStart2.Visible = True
+        picStart2.Enabled = True
+        picReset2.Visible = False
+        picReset2.Enabled = False
+        picEdit2.Image = My.Resources.edit_grey
+        picEdit2.Enabled = False
+
+        If cboName2.SelectedIndex <> -1 Then
+            Dim logistic As LogisticSupport = getLogistic(cboName2.SelectedItem.ToString)
+
+            picEdit2.Image = My.Resources.edit
+            picEdit2.Enabled = True
+            lblTime2.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
+            lblHour2.Text = logistic.getTime().ToString
+        End If
+    End Sub
+
+    Private Sub cboName3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName3.SelectedIndexChanged
+        Timer3.Stop()
+        picStart3.Visible = True
+        picStart3.Enabled = True
+        picReset3.Visible = False
+        picReset3.Enabled = False
+        picEdit3.Image = My.Resources.edit_grey
+        picEdit3.Enabled = False
+
+        If cboName3.SelectedIndex <> -1 Then
+            Dim logistic As LogisticSupport = getLogistic(cboName3.SelectedItem.ToString)
+
+            picEdit3.Image = My.Resources.edit
+            picEdit3.Enabled = True
+            lblTime3.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
+            lblHour3.Text = logistic.getTime().ToString
+        End If
+    End Sub
+
+    Private Sub cboName4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboName4.SelectedIndexChanged
+        Timer4.Stop()
+        picStart4.Visible = True
+        picStart4.Enabled = True
+        picReset4.Visible = False
+        picReset4.Enabled = False
+        picEdit4.Image = My.Resources.edit_grey
+        picEdit4.Enabled = False
+
+        If cboName4.SelectedIndex <> -1 Then
+            Dim logistic As LogisticSupport = getLogistic(cboName4.SelectedItem.ToString)
+
+
+            picEdit4.Image = My.Resources.edit
+            picEdit4.Enabled = True
+            lblTime4.Text = logistic.getHour.ToString("D2") & ":" & logistic.getMinute.ToString("D2") & ":00"
+            lblHour4.Text = logistic.getTime().ToString
+        End If
+    End Sub
+
+    ' Timer
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Dim ts As TimeSpan = TargetDT1.Subtract(DateTime.Now)
+        currentTime1 = ts.ToString("hh\:mm\:ss")
+
+        If lblTime1.Text = "00:" + My.Settings.BeforeMinute.ToString("D2") + ":" + My.Settings.BeforeSecond.ToString("D2") And notified1 = False Then
+            Notify(1, cboName1.SelectedItem.ToString)
+            notified1 = True
+        End If
+
+        If ts.TotalMilliseconds > 0 Then
+            lblTime1.Text = currentTime1
+        Else
+            lblTime1.Text = ("00:00:00")
+            Timer1.Stop()
+            currentTime1 = ("00:00:00")
+            picReset1_Click(Nothing, Nothing)
+            If My.Settings.AutoRestart Then
+                picStart1_Click(Nothing, Nothing)
+            Else
+                If restartMission(1, cboName1.SelectedItem.ToString) Then
+                    picStart1_Click(Nothing, Nothing)
+                End If
+            End If
+        End If
+        updateNotifyIconText()
+    End Sub
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        Dim ts As TimeSpan = TargetDT2.Subtract(DateTime.Now)
+        currentTime2 = ts.ToString("hh\:mm\:ss")
+
+        If lblTime2.Text = "00:" + My.Settings.BeforeMinute.ToString("D2") + ":" + My.Settings.BeforeSecond.ToString("D2") And notified2 = False Then
+            Notify(2, cboName2.SelectedItem.ToString)
+            notified2 = True
+        End If
+
+        If ts.TotalMilliseconds > 0 Then
+            lblTime2.Text = currentTime2
+        Else
+            lblTime2.Text = ("00:00:00")
+            Timer2.Stop()
+            currentTime2 = ("00:00:00")
+            picReset2_Click(Nothing, Nothing)
+            If My.Settings.AutoRestart Then
+                picStart1_Click(Nothing, Nothing)
+            Else
+                If restartMission(2, cboName2.SelectedItem.ToString) Then
+                    picStart2_Click(Nothing, Nothing)
+                End If
+            End If
+        End If
+        updateNotifyIconText()
+    End Sub
+
+    Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles Timer3.Tick
+        Dim ts As TimeSpan = TargetDT3.Subtract(DateTime.Now)
+        currentTime3 = ts.ToString("hh\:mm\:ss")
+
+        If lblTime3.Text = "00:" + My.Settings.BeforeMinute.ToString("D2") + ":" + My.Settings.BeforeSecond.ToString("D2") And notified3 = False Then
+            Notify(3, cboName3.SelectedItem.ToString)
+            notified3 = True
+        End If
+
+        If ts.TotalMilliseconds > 0 Then
+            lblTime3.Text = currentTime3
+        Else
+            lblTime3.Text = ("00:00:00")
+            Timer3.Stop()
+            currentTime3 = ("00:00:00")
+            picReset3_Click(Nothing, Nothing)
+            If My.Settings.AutoRestart Then
+                picStart1_Click(Nothing, Nothing)
+            Else
+                If restartMission(3, cboName3.SelectedItem.ToString) Then
+                    picStart3_Click(Nothing, Nothing)
+                End If
+            End If
+        End If
+        updateNotifyIconText()
+    End Sub
+
+    Private Sub Timer4_Tick(sender As Object, e As EventArgs) Handles Timer4.Tick
+        Dim ts As TimeSpan = TargetDT4.Subtract(DateTime.Now)
+        currentTime4 = ts.ToString("hh\:mm\:ss")
+
+        If lblTime4.Text = "00:" + My.Settings.BeforeMinute.ToString("D2") + ":" + My.Settings.BeforeSecond.ToString("D2") And notified4 = False Then
+            Notify(4, cboName4.SelectedItem.ToString)
+            notified4 = True
+        End If
+
+        If ts.TotalMilliseconds > 0 Then
+            lblTime4.Text = currentTime4
+        Else
+            lblTime4.Text = ("00:00:00")
+            Timer4.Stop()
+            currentTime4 = ("00:00:00")
+            picReset4_Click(Nothing, Nothing)
+            If My.Settings.AutoRestart Then
+                picStart1_Click(Nothing, Nothing)
+            Else
+                If restartMission(4, cboName4.SelectedItem.ToString) Then
+                    picStart4_Click(Nothing, Nothing)
+                End If
+            End If
+        End If
+        updateNotifyIconText()
+    End Sub
+
+    ' Start and Stop button click event
+    Private Sub picStart1_Click(sender As Object, e As EventArgs) Handles picStart1.Click
+        notified1 = False
+        If cboName1.SelectedIndex <> -1 Then
+            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour1.Text))
+            TargetDT1 = DateTime.Now.Add(CountDownFrom)
+            Timer1.Interval = 50
+            Timer1.Start()
+
+            picStart1.Visible = False
+            picStart1.Enabled = False
+            picReset1.Visible = True
+            picReset1.Enabled = True
+            picEdit1.Image = My.Resources.edit_grey
+            picEdit1.Enabled = False
+        End If
+    End Sub
+
+    Private Sub picStart2_Click(sender As Object, e As EventArgs) Handles picStart2.Click
+        If cboName2.SelectedIndex <> -1 Then
+            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour2.Text))
+            TargetDT2 = DateTime.Now.Add(CountDownFrom)
+            Timer2.Interval = 50
+            Timer2.Start()
+
+            picStart2.Visible = False
+            picStart2.Enabled = False
+            picReset2.Visible = True
+            picReset2.Enabled = True
+            picEdit2.Image = My.Resources.edit_grey
+            picEdit2.Enabled = False
+        End If
+    End Sub
+
+    Private Sub picStart3_Click(sender As Object, e As EventArgs) Handles picStart3.Click
+        If cboName3.SelectedIndex <> -1 Then
+            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour3.Text))
+            TargetDT3 = DateTime.Now.Add(CountDownFrom)
+            Timer3.Interval = 50
+            Timer3.Start()
+
+            picStart3.Visible = False
+            picStart3.Enabled = False
+            picReset3.Visible = True
+            picReset3.Enabled = True
+            picEdit3.Image = My.Resources.edit_grey
+            picEdit3.Enabled = False
+        End If
+    End Sub
+
+    Private Sub picStart4_Click(sender As Object, e As EventArgs) Handles picStart4.Click
+        If cboName4.SelectedIndex <> -1 Then
+            Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour4.Text))
+            TargetDT4 = DateTime.Now.Add(CountDownFrom)
+            Timer4.Interval = 50
+            Timer4.Start()
+
+            picStart4.Visible = False
+            picStart4.Enabled = False
+            picReset4.Visible = True
+            picReset4.Enabled = True
+            picEdit4.Image = My.Resources.edit_grey
+            picEdit4.Enabled = False
+        End If
+    End Sub
+
+    Private Sub picReset1_Click(sender As Object, e As EventArgs) Handles picReset1.Click
+        Timer1.Stop()
+        picEdit1.Image = My.Resources.edit
+        picEdit1.Enabled = True
+        cboName1_SelectedIndexChanged(Nothing, Nothing)
+    End Sub
+
+    Private Sub picReset2_Click(sender As Object, e As EventArgs) Handles picReset2.Click
+        Timer2.Stop()
+        picEdit2.Image = My.Resources.edit
+        picEdit2.Enabled = True
+        cboName2_SelectedIndexChanged(Nothing, Nothing)
+    End Sub
+
+    Private Sub picReset3_Click(sender As Object, e As EventArgs) Handles picReset3.Click
+        Timer3.Stop()
+        picEdit3.Image = My.Resources.edit
+        picEdit3.Enabled = True
+        cboName3_SelectedIndexChanged(Nothing, Nothing)
+    End Sub
+
+    Private Sub picReset4_Click(sender As Object, e As EventArgs) Handles picReset4.Click
+        Timer4.Stop()
+        picEdit4.Image = My.Resources.edit
+        picEdit4.Enabled = True
+        cboName4_SelectedIndexChanged(Nothing, Nothing)
+    End Sub
+
     ' Notification
     Private Sub Notify(index As Integer, name As String)
-        If index = 1 Then
-            NotifyIcon1.Icon = My.Resources.icon
-            NotifyIcon1.Visible = True
-            NotifyIcon1.BalloonTipTitle = "指挥官我们回来啦～"
-            NotifyIcon1.BalloonTipText = "后勤队伍#1已从 " & name & " 归来！"
-            NotifyIcon1.ShowBalloonTip(3000)
+        If frmNotification.open = True Then
+            Threading.Thread.Sleep(2000)
         End If
-
-        If index = 2 Then
-            NotifyIcon2.Icon = My.Resources.icon
-            NotifyIcon1.Visible = True
-            NotifyIcon2.BalloonTipTitle = "指挥官我们回来啦～"
-            NotifyIcon2.BalloonTipText = "后勤队伍#2已从 " & name & " 归来！"
-            NotifyIcon2.ShowBalloonTip(3000)
-        End If
-
-        If index = 3 Then
-            NotifyIcon3.Icon = My.Resources.icon
-            NotifyIcon1.Visible = True
-            NotifyIcon3.BalloonTipTitle = "指挥官我们回来啦～"
-            NotifyIcon3.BalloonTipText = "后勤队伍#3已从 " & name & " 归来！"
-            NotifyIcon3.ShowBalloonTip(3000)
-        End If
-
-        If index = 4 Then
-            NotifyIcon4.Icon = My.Resources.icon
-            NotifyIcon1.Visible = True
-            NotifyIcon4.BalloonTipTitle = "指挥官我们回来啦～"
-            NotifyIcon4.BalloonTipText = "后勤队伍#4已从 " & name & " 归来！"
-            NotifyIcon4.ShowBalloonTip(3000)
-        End If
+        frmNotification.counter = 0
+        frmNotification.Opacity = 1
+        frmNotification.sendNotification(index, name)
+        frmNotification.Show()
     End Sub
 
-    Private Sub NotifyIcon_BalloonTipClicked(sender As Object, e As EventArgs) Handles _
-            NotifyIcon1.BalloonTipClicked, NotifyIcon2.BalloonTipClicked,
-            NotifyIcon3.BalloonTipClicked, NotifyIcon4.BalloonTipClicked
-
-        WindowState = FormWindowState.Normal
-        TopMost = True
-        TopMost = False
-    End Sub
-
-    Private Sub NotifyIcon5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles NotifyIcon5.DoubleClick, NotifyIcon5.BalloonTipClicked
+    Public Sub NotifyIcon5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles NotifyIcon5.DoubleClick, NotifyIcon5.BalloonTipClicked, ctxShow.Click
+        Opacity = 1
         ShowInTaskbar = True
-        Me.WindowState = FormWindowState.Normal
+        Visible = True
+        Icon = My.Resources.icon
         NotifyIcon5.Visible = False
         NotifyIcon5.Icon = Nothing
+    End Sub
+
+    'Time edit button
+    Private Sub picEdit1_Click(sender As Object, e As EventArgs) Handles picEdit1.Click
+        frmEditTime.setTime(1, cboName1.SelectedIndex, lblTime1.Text)
+        frmEditTime.ShowDialog()
+    End Sub
+
+    Private Sub picEdit2_Click(sender As Object, e As EventArgs) Handles picEdit2.Click
+        frmEditTime.setTime(2, cboName2.SelectedIndex, lblTime2.Text)
+        frmEditTime.ShowDialog()
+    End Sub
+
+    Private Sub picEdit3_Click(sender As Object, e As EventArgs) Handles picEdit3.Click
+        frmEditTime.setTime(3, cboName3.SelectedIndex, lblTime3.Text)
+        frmEditTime.ShowDialog()
+    End Sub
+
+    Private Sub picEdit4_Click(sender As Object, e As EventArgs) Handles picEdit4.Click
+        frmEditTime.setTime(4, cboName4.SelectedIndex, lblTime4.Text)
+        frmEditTime.ShowDialog()
     End Sub
 
     ' Others function
@@ -914,7 +1146,7 @@ Public Class frmMain
                 If settings(0) <> "" Then
                     cboName1.Text = settings(0)
                 Else
-                    cboname1.SelectedIndex = -1
+                    cboName1.SelectedIndex = -1
                 End If
 
                 If settings(1) <> "" Then
@@ -1016,13 +1248,20 @@ Public Class frmMain
 
     Private Function restartMission(index As Integer, name As String) As Boolean
 
-        WindowState = FormWindowState.Normal
-        TopMost = True
-
-        Dim dlgResult As DialogResult = MessageBox.Show("是否重新计时[" & name & "]呢?", "后勤#" & index & "重新派遣",
-             MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        TopMost = False
+        Dim dlgResult As DialogResult = DialogResult.No
         Dim result As Boolean = False
+
+        If My.Settings.Popup Then
+            Visible = True
+            Opacity = 1
+            WindowState = FormWindowState.Normal
+            Me.Icon = My.Resources.icon
+            TopMost = My.Settings.TopMost
+            TopMost = False
+            dlgResult = MessageBox.Show("是否重新计时[" & name & "]呢?", "后勤#" & index & "重新派遣",
+             MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        End If
+
 
         If dlgResult = DialogResult.Yes Then
             result = True
@@ -1032,25 +1271,32 @@ Public Class frmMain
     End Function
 
     Private Sub uncheckOthers()
-        clear()
-
         If manpowerClicked Then
+            clear()
             PictureBox1_Click(Nothing, Nothing)
         ElseIf ammoClicked Then
+            clear()
             PictureBox2_Click(Nothing, Nothing)
         ElseIf rationClicked Then
+            clear()
             PictureBox3_Click(Nothing, Nothing)
         ElseIf partClicked Then
+            clear()
             PictureBox4_Click(Nothing, Nothing)
         ElseIf dollClicked Then
+            clear()
             PictureBox5_Click(Nothing, Nothing)
         ElseIf equipmentClicked Then
+            clear()
             PictureBox6_Click(Nothing, Nothing)
         ElseIf productionClicked Then
+            clear()
             PictureBox7_Click(Nothing, Nothing)
         ElseIf restoreClicked Then
+            clear()
             PictureBox8_Click(Nothing, Nothing)
         ElseIf tokenClicked Then
+            clear()
             PictureBox9_Click(Nothing, Nothing)
         ElseIf favClicked1 Then
             PictureBox10_Click(Nothing, Nothing)
@@ -1470,15 +1716,6 @@ Public Class frmMain
         Return logistic
     End Function
 
-    Private Sub getAnnounceSettings()
-        If My.Settings.AnnounceBefore <> Nothing Then
-            announceBefore = My.Settings.AnnounceBefore
-        Else
-            My.Settings.AnnounceBefore = 0
-            announceBefore = 0
-        End If
-    End Sub
-
     Public Sub setFavoriteName(_favName As String)
         favName = _favName
     End Sub
@@ -1522,6 +1759,40 @@ Public Class frmMain
             "#3  " & currentTime3 & vbNewLine &
             "#4  " & currentTime4 & vbNewLine
     End Sub
+
+    Private Sub picEdit_MouseHover(sender As Object, e As EventArgs) Handles picEdit4.MouseHover, picEdit3.MouseHover, picEdit2.MouseHover, picEdit1.MouseHover
+        Dim tt As New ToolTip()
+        tt.SetToolTip(picEdit1, "编辑时间")
+        tt.SetToolTip(picEdit2, "编辑时间")
+        tt.SetToolTip(picEdit3, "编辑时间")
+        tt.SetToolTip(picEdit4, "编辑时间")
+    End Sub
+
+    Private Function changeLogisticList() As Boolean
+        Dim change As Boolean = False
+
+        If Timer1.Enabled = True Or Timer2.Enabled = True Or Timer3.Enabled = True Or Timer4.Enabled = True Then
+            frmMsgBox.title = "提示"
+            frmMsgBox.content = "切换后勤列表将会清除目前正在计时的后勤。" & vbNewLine & "是否切换？"
+            frmMsgBox.btnYesString = "切换"
+            frmMsgBox.btnNoString = "取消"
+
+            Dim dlg As DialogResult = frmMsgBox.ShowDialog()
+
+            If dlg = DialogResult.Yes Then
+                change = True
+                picReset1_Click(Nothing, Nothing)
+                picReset2_Click(Nothing, Nothing)
+                picReset3_Click(Nothing, Nothing)
+                picReset4_Click(Nothing, Nothing)
+            End If
+        Else
+            change = True
+        End If
+
+        Return change
+    End Function
+
     ' Save to settings
     Private Sub saveLogistic(index As Integer)
         Dim logistic1 As String = ""
@@ -1594,7 +1865,10 @@ Public Class frmMain
         My.Settings.Save()
     End Sub
 
-    Private Sub mnuViewLogistic_Click(sender As Object, e As EventArgs) Handles mnuViewLogistic.Click
-        后勤查询.Show()
+    Private Sub mnuExit_Click(sender As Object, e As EventArgs) Handles mnuExit.Click
+        Dim dlgResult As DialogResult = MessageBox.Show("确定要退出吗？", "关闭提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If dlgResult = DialogResult.Yes Then
+            End
+        End If
     End Sub
 End Class

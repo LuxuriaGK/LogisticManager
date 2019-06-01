@@ -27,10 +27,6 @@ Partial Class frmMain
         Me.picReset3 = New System.Windows.Forms.PictureBox()
         Me.lblHour4 = New System.Windows.Forms.Label()
         Me.lblHour3 = New System.Windows.Forms.Label()
-        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.NotifyIcon2 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.NotifyIcon3 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.NotifyIcon4 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.picReset4 = New System.Windows.Forms.PictureBox()
         Me.picReset2 = New System.Windows.Forms.PictureBox()
         Me.picReset1 = New System.Windows.Forms.PictureBox()
@@ -64,8 +60,9 @@ Partial Class frmMain
         Me.Timer3 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer4 = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.mnuViewLogistic = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuSetting = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuSettingAnnounce = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -98,7 +95,11 @@ Partial Class frmMain
         Me.Label20 = New System.Windows.Forms.Label()
         Me.btnSaveFavorite = New System.Windows.Forms.Button()
         Me.PictureBox14 = New System.Windows.Forms.PictureBox()
-        Me.mnuViewLogistic = New System.Windows.Forms.ToolStripMenuItem()
+        Me.picEdit1 = New System.Windows.Forms.PictureBox()
+        Me.picEdit2 = New System.Windows.Forms.PictureBox()
+        Me.picEdit3 = New System.Windows.Forms.PictureBox()
+        Me.picEdit4 = New System.Windows.Forms.PictureBox()
+        Me.Label21 = New System.Windows.Forms.Label()
         CType(Me.picReset3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picReset4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picReset2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -123,6 +124,10 @@ Partial Class frmMain
         CType(Me.PictureBox12, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox14, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picEdit1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picEdit2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picEdit3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picEdit4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'picReset3
@@ -158,26 +163,6 @@ Partial Class frmMain
         Me.lblHour3.TabIndex = 25
         Me.lblHour3.Text = "0"
         Me.lblHour3.Visible = False
-        '
-        'NotifyIcon1
-        '
-        Me.NotifyIcon1.Text = "后勤#1归来"
-        Me.NotifyIcon1.Visible = True
-        '
-        'NotifyIcon2
-        '
-        Me.NotifyIcon2.Text = "后勤#2归来"
-        Me.NotifyIcon2.Visible = True
-        '
-        'NotifyIcon3
-        '
-        Me.NotifyIcon3.Text = "后勤#3归来"
-        Me.NotifyIcon3.Visible = True
-        '
-        'NotifyIcon4
-        '
-        Me.NotifyIcon4.Text = "后勤#4归来"
-        Me.NotifyIcon4.Visible = True
         '
         'picReset4
         '
@@ -477,7 +462,7 @@ Partial Class frmMain
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSetting, Me.mnuViewLogistic, Me.mnuAbout})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuViewLogistic, Me.mnuSetting, Me.mnuAbout, Me.mnuExit})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(7, 3, 0, 3)
@@ -485,18 +470,23 @@ Partial Class frmMain
         Me.MenuStrip1.TabIndex = 32
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'mnuViewLogistic
+        '
+        Me.mnuViewLogistic.Name = "mnuViewLogistic"
+        Me.mnuViewLogistic.Size = New System.Drawing.Size(69, 19)
+        Me.mnuViewLogistic.Text = "后勤查询"
+        '
         'mnuSetting
         '
-        Me.mnuSetting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSettingAnnounce})
         Me.mnuSetting.Name = "mnuSetting"
         Me.mnuSetting.Size = New System.Drawing.Size(44, 19)
         Me.mnuSetting.Text = "设置"
         '
-        'mnuSettingAnnounce
+        'mnuExit
         '
-        Me.mnuSettingAnnounce.Name = "mnuSettingAnnounce"
-        Me.mnuSettingAnnounce.Size = New System.Drawing.Size(122, 22)
-        Me.mnuSettingAnnounce.Text = "提前通知"
+        Me.mnuExit.Name = "mnuExit"
+        Me.mnuExit.Size = New System.Drawing.Size(43, 19)
+        Me.mnuExit.Text = "退出"
         '
         'btnStart
         '
@@ -847,7 +837,7 @@ Partial Class frmMain
         '
         'PictureBox14
         '
-        Me.PictureBox14.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.PictureBox14.Cursor = System.Windows.Forms.Cursors.Arrow
         Me.PictureBox14.Image = Global.少女前线后勤提醒.My.Resources.Resources.hk416_maid
         Me.PictureBox14.Location = New System.Drawing.Point(372, 147)
         Me.PictureBox14.Name = "PictureBox14"
@@ -856,17 +846,71 @@ Partial Class frmMain
         Me.PictureBox14.TabIndex = 42
         Me.PictureBox14.TabStop = False
         '
-        'mnuViewLogistic
+        'picEdit1
         '
-        Me.mnuViewLogistic.Name = "mnuViewLogistic"
-        Me.mnuViewLogistic.Size = New System.Drawing.Size(69, 19)
-        Me.mnuViewLogistic.Text = "后勤查询"
+        Me.picEdit1.Enabled = False
+        Me.picEdit1.Image = Global.少女前线后勤提醒.My.Resources.Resources.edit_grey
+        Me.picEdit1.Location = New System.Drawing.Point(296, 159)
+        Me.picEdit1.Name = "picEdit1"
+        Me.picEdit1.Size = New System.Drawing.Size(16, 16)
+        Me.picEdit1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picEdit1.TabIndex = 43
+        Me.picEdit1.TabStop = False
+        '
+        'picEdit2
+        '
+        Me.picEdit2.Enabled = False
+        Me.picEdit2.Image = Global.少女前线后勤提醒.My.Resources.Resources.edit_grey
+        Me.picEdit2.Location = New System.Drawing.Point(296, 215)
+        Me.picEdit2.Name = "picEdit2"
+        Me.picEdit2.Size = New System.Drawing.Size(16, 16)
+        Me.picEdit2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picEdit2.TabIndex = 43
+        Me.picEdit2.TabStop = False
+        '
+        'picEdit3
+        '
+        Me.picEdit3.Enabled = False
+        Me.picEdit3.Image = Global.少女前线后勤提醒.My.Resources.Resources.edit_grey
+        Me.picEdit3.Location = New System.Drawing.Point(296, 272)
+        Me.picEdit3.Name = "picEdit3"
+        Me.picEdit3.Size = New System.Drawing.Size(16, 16)
+        Me.picEdit3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picEdit3.TabIndex = 43
+        Me.picEdit3.TabStop = False
+        '
+        'picEdit4
+        '
+        Me.picEdit4.Enabled = False
+        Me.picEdit4.Image = Global.少女前线后勤提醒.My.Resources.Resources.edit_grey
+        Me.picEdit4.Location = New System.Drawing.Point(296, 329)
+        Me.picEdit4.Name = "picEdit4"
+        Me.picEdit4.Size = New System.Drawing.Size(16, 16)
+        Me.picEdit4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picEdit4.TabIndex = 43
+        Me.picEdit4.TabStop = False
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        Me.Label21.ForeColor = System.Drawing.Color.Red
+        Me.Label21.Location = New System.Drawing.Point(30, 368)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(143, 13)
+        Me.Label21.TabIndex = 44
+        Me.Label21.Text = "*切换后勤会重置计时喔～"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(619, 439)
+        Me.Controls.Add(Me.Label21)
+        Me.Controls.Add(Me.picEdit4)
+        Me.Controls.Add(Me.picEdit3)
+        Me.Controls.Add(Me.picEdit2)
+        Me.Controls.Add(Me.picEdit1)
         Me.Controls.Add(Me.PictureBox14)
         Me.Controls.Add(Me.btnSaveFavorite)
         Me.Controls.Add(Me.Label9)
@@ -957,6 +1001,10 @@ Partial Class frmMain
         CType(Me.PictureBox12, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox14, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picEdit1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picEdit2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picEdit3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picEdit4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -965,10 +1013,6 @@ Partial Class frmMain
     Friend WithEvents picReset3 As PictureBox
     Friend WithEvents lblHour4 As Label
     Friend WithEvents lblHour3 As Label
-    Friend WithEvents NotifyIcon1 As NotifyIcon
-    Friend WithEvents NotifyIcon2 As NotifyIcon
-    Friend WithEvents NotifyIcon3 As NotifyIcon
-    Friend WithEvents NotifyIcon4 As NotifyIcon
     Friend WithEvents picReset4 As PictureBox
     Friend WithEvents picReset2 As PictureBox
     Friend WithEvents picReset1 As PictureBox
@@ -1005,7 +1049,6 @@ Partial Class frmMain
     Friend WithEvents btnStart As Button
     Friend WithEvents Label5 As Label
     Friend WithEvents mnuSetting As ToolStripMenuItem
-    Friend WithEvents mnuSettingAnnounce As ToolStripMenuItem
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
@@ -1037,4 +1080,10 @@ Partial Class frmMain
     Friend WithEvents btnSaveFavorite As Button
     Friend WithEvents PictureBox14 As PictureBox
     Friend WithEvents mnuViewLogistic As ToolStripMenuItem
+    Friend WithEvents picEdit1 As PictureBox
+    Friend WithEvents picEdit2 As PictureBox
+    Friend WithEvents picEdit3 As PictureBox
+    Friend WithEvents picEdit4 As PictureBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents mnuExit As ToolStripMenuItem
 End Class

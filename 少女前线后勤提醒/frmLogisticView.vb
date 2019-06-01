@@ -1,4 +1,4 @@
-﻿Public Class 后勤查询
+﻿Public Class frmLogisticView
 
     Dim arr_logistic As LogisticSupport()
 
@@ -62,7 +62,7 @@
                 Dim calcResValue4 As Double = If((arr_logistic(i).getPart() / arr_logistic(i).getTime) = 0, 0, (arr_logistic(i).getPart() / arr_logistic(i).getTime))
 
                 dgvLogistic.Rows.Add(arr_logistic(i).getName,
-                                     Integer.Parse(arr_logistic(i).getHour.ToString("D2")) & ":" & Integer.Parse(arr_logistic(i).getMinute.ToString("D2")),
+                                     arr_logistic(i).getHour.ToString("D2") & ":" & arr_logistic(i).getMinute.ToString("D2"),
                                      Double.Parse(calcResValue1.ToString("N2")),
                                      Double.Parse(calcResValue2.ToString("N2")),
                                      Double.Parse(calcResValue3.ToString("N2")),

@@ -25,6 +25,7 @@ Partial Class frmExit
         Me.radMinimize = New System.Windows.Forms.RadioButton()
         Me.radExit = New System.Windows.Forms.RadioButton()
         Me.btnConfirm = New System.Windows.Forms.Button()
+        Me.chkDontAskAgain = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'radMinimize
@@ -58,12 +59,23 @@ Partial Class frmExit
         Me.btnConfirm.Text = "确定"
         Me.btnConfirm.UseVisualStyleBackColor = True
         '
+        'chkDontAskAgain
+        '
+        Me.chkDontAskAgain.AutoSize = True
+        Me.chkDontAskAgain.Location = New System.Drawing.Point(12, 85)
+        Me.chkDontAskAgain.Name = "chkDontAskAgain"
+        Me.chkDontAskAgain.Size = New System.Drawing.Size(74, 17)
+        Me.chkDontAskAgain.TabIndex = 2
+        Me.chkDontAskAgain.Text = "不再提醒"
+        Me.chkDontAskAgain.UseVisualStyleBackColor = True
+        '
         'frmExit
         '
         Me.AcceptButton = Me.btnConfirm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(175, 115)
+        Me.Controls.Add(Me.chkDontAskAgain)
         Me.Controls.Add(Me.btnConfirm)
         Me.Controls.Add(Me.radExit)
         Me.Controls.Add(Me.radMinimize)
@@ -82,4 +94,5 @@ Partial Class frmExit
     Friend WithEvents radMinimize As RadioButton
     Friend WithEvents radExit As RadioButton
     Friend WithEvents btnConfirm As Button
+    Friend WithEvents chkDontAskAgain As CheckBox
 End Class
