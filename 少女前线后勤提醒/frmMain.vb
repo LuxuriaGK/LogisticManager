@@ -170,9 +170,6 @@ Public Class frmMain
             NotifyIcon5.Visible = True
             NotifyIcon5.Icon = My.Resources.icon
             ShowInTaskbar = False
-            If frmNotification.open = True Then
-                Threading.Thread.Sleep(2000)
-            End If
             frmNotification.counter = 0
             frmNotification.Opacity = 1
             frmNotification.sendOthersNotification("已最小化至托盘", "少女前线后勤管理")
@@ -991,6 +988,7 @@ Public Class frmMain
     End Sub
 
     Private Sub picStart2_Click(sender As Object, e As EventArgs) Handles picStart2.Click
+        notified2 = False
         If cboName2.SelectedIndex <> -1 Then
             Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour2.Text))
             TargetDT2 = DateTime.Now.Add(CountDownFrom)
@@ -1007,6 +1005,7 @@ Public Class frmMain
     End Sub
 
     Private Sub picStart3_Click(sender As Object, e As EventArgs) Handles picStart3.Click
+        notified3 = False
         If cboName3.SelectedIndex <> -1 Then
             Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour3.Text))
             TargetDT3 = DateTime.Now.Add(CountDownFrom)
@@ -1023,6 +1022,7 @@ Public Class frmMain
     End Sub
 
     Private Sub picStart4_Click(sender As Object, e As EventArgs) Handles picStart4.Click
+        notified4 = False
         If cboName4.SelectedIndex <> -1 Then
             Dim CountDownFrom As TimeSpan = TimeSpan.FromHours(Double.Parse(lblHour4.Text))
             TargetDT4 = DateTime.Now.Add(CountDownFrom)
@@ -1068,9 +1068,6 @@ Public Class frmMain
 
     ' Notification
     Private Sub Notify(index As Integer, name As String)
-        If frmNotification.open = True Then
-            Threading.Thread.Sleep(2000)
-        End If
         frmNotification.counter = 0
         frmNotification.Opacity = 1
         frmNotification.sendNotification(index, name)
@@ -1716,10 +1713,6 @@ Public Class frmMain
         Return logistic
     End Function
 
-    Public Sub setFavoriteName(_favName As String)
-        favName = _favName
-    End Sub
-
     Private Sub disableAllButton()
         manpowerClicked = False
         ammoClicked = False
@@ -1754,10 +1747,10 @@ Public Class frmMain
 
     Private Sub updateNotifyIconText()
         NotifyIcon5.Text =
-            "#1  " & currentTime1 & vbNewLine &
-            "#2  " & currentTime2 & vbNewLine &
-            "#3  " & currentTime3 & vbNewLine &
-            "#4  " & currentTime4 & vbNewLine
+            "#1  " & If(currentTime1 = "00:00:00", "已完成", currentTime1) & vbNewLine &
+            "#2  " & If(currentTime2 = "00:00:00", "已完成", currentTime2) & vbNewLine &
+            "#3  " & If(currentTime3 = "00:00:00", "已完成", currentTime3) & vbNewLine &
+            "#4  " & If(currentTime4 = "00:00:00", "已完成", currentTime4) & vbNewLine
     End Sub
 
     Private Sub picEdit_MouseHover(sender As Object, e As EventArgs) Handles picEdit4.MouseHover, picEdit3.MouseHover, picEdit2.MouseHover, picEdit1.MouseHover

@@ -15,7 +15,7 @@
         If String.IsNullOrWhiteSpace(txtFavName.Text) Then
             MessageBox.Show("名字不能为空", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
-            frmMain.setFavoriteName(txtFavName.Text)
+            frmMain.favName = txtFavName.Text
             Me.DialogResult = DialogResult.OK
             Close()
         End If
