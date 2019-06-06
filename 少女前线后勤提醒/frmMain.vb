@@ -214,7 +214,6 @@ Public Class frmMain
 
     Private Sub btn_clear_Click(sender As Object, e As EventArgs) Handles btn_clear.Click
         clear()
-        disableAllButton()
     End Sub
 
     Private Sub btn_resetTimer_Click(sender As Object, e As EventArgs) Handles btn_resetTime.Click
@@ -1236,22 +1235,6 @@ Public Class frmMain
 
         Return logistic
     End Function
-
-    Private Sub disableAllButton()
-        favClicked1 = False
-        favClicked2 = False
-        favClicked3 = False
-        favClicked4 = False
-
-        PictureBox10.Image = My.Resources.button_grey
-        PictureBox11.Image = My.Resources.button_grey
-        PictureBox12.Image = My.Resources.button_grey
-        PictureBox13.Image = My.Resources.button_grey
-
-        btnSaveFavorite.Enabled = False
-        btnSaveFavorite.ForeColor = Color.Black
-        btnSaveFavorite.BackColor = Color.LightGray
-    End Sub
 
     Private Sub updateNotifyIconText()
         ntf1.Text =
