@@ -183,13 +183,49 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property Popup() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property Image() As String
             Get
-                Return CType(Me("Popup"),Boolean)
+                Return CType(Me("Image"),String)
             End Get
             Set
-                Me("Popup") = value
+                Me("Image") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property OtherTimerHour() As String
+            Get
+                Return CType(Me("OtherTimerHour"),String)
+            End Get
+            Set
+                Me("OtherTimerHour") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property OtherTimerTime() As String
+            Get
+                Return CType(Me("OtherTimerTime"),String)
+            End Get
+            Set
+                Me("OtherTimerTime") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("8")>  _
+        Public Property NotificationSound() As Integer
+            Get
+                Return CType(Me("NotificationSound"),Integer)
+            End Get
+            Set
+                Me("NotificationSound") = value
             End Set
         End Property
     End Class

@@ -120,6 +120,18 @@
     <Compile Include="frmFavoriteName.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmFilteredLogistic.Designer.vb">
+      <DependentUpon>frmFilteredLogistic.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFilteredLogistic.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogisticSetting.Designer.vb">
+      <DependentUpon>frmLogisticSetting.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogisticSetting.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmLogisticView.Designer.vb">
       <DependentUpon>frmLogisticView.vb</DependentUpon>
     </Compile>
@@ -157,7 +169,7 @@
     <Compile Include="frmSettings.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LogisticCalculation.vb" />
+    <Compile Include="LogisticFilter.vb" />
     <Compile Include="LogisticSupport.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -188,6 +200,12 @@
     <EmbeddedResource Include="frmFavoriteName.resx">
       <DependentUpon>frmFavoriteName.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmFilteredLogistic.resx">
+      <DependentUpon>frmFilteredLogistic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogisticSetting.resx">
+      <DependentUpon>frmLogisticSetting.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmLogisticView.resx">
       <DependentUpon>frmLogisticView.vb</DependentUpon>
     </EmbeddedResource>
@@ -208,9 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -227,7 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\play.png" />
@@ -257,9 +274,6 @@
     <None Include="Resources\button_red.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\hk416_maid.png" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -269,16 +283,124 @@
     <None Include="Resources\edit_grey.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\807792456.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\exit.png" />
+    <None Include="Resources\QR.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ro635.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\G11_sound.wav" />
+    <None Include="Resources\cross_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gfl_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\grey_textbox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lightgrey_textbox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sound_maximize.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sound_minimize.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\doll_ump45.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\79式.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\AK12.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\AN94.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\AR15.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\ART556.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\G11.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\G41.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\HK416.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\M4A1 MOD.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\M4A1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\MK23.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\SAT8.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\Sopmod.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\Ump9.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\Ump45.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\Vector.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\WA2000.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\XM8.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\卡尔卡诺1891 儿童节.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\卡尔卡诺1891.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\卡尔卡诺1938 儿童节.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\卡尔卡诺1983.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\李-恩菲尔德 儿童节.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\索米.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audio\蝎式.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Audio\CMS.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

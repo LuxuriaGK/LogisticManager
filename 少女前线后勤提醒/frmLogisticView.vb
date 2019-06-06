@@ -1,11 +1,15 @@
-﻿Public Class frmLogisticView
+﻿Imports System.Runtime.InteropServices
+
+Public Class frmLogisticView
 
     Dim arr_logistic As LogisticSupport()
 
     Private Sub frmLogisticView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         arr_logistic = frmMain.arr_Logistic
-        Icon = My.Resources.icon
         LogisticList()
+        dgvLogistic.ColumnHeadersDefaultCellStyle.Font = New Font("Microsoft YaHei", 11.25)
+        dgvLogistic.DefaultCellStyle.Font = New Font("Microsoft YaHei", 10.25)
+        Icon = My.Resources.icon
     End Sub
 
     Private Sub LogisticList()
@@ -13,13 +17,16 @@
 
         dgvLogistic.ColumnCount = 8
         dgvLogistic.Columns(0).Name = "后勤"
+        dgvLogistic.Columns(0).Width = 75
         dgvLogistic.Columns(1).Name = "任务时间"
         dgvLogistic.Columns(2).Name = "人力"
         dgvLogistic.Columns(3).Name = "弹药"
         dgvLogistic.Columns(4).Name = "口粮"
         dgvLogistic.Columns(5).Name = "零件"
         dgvLogistic.Columns(6).Name = "获得道具1"
+        dgvLogistic.Columns(6).Width = 110
         dgvLogistic.Columns(7).Name = "获得道具2"
+        dgvLogistic.Columns(7).Width = 110
 
         For i = 0 To arr_logistic.Count - 1
             If arr_logistic IsNot Nothing Then
@@ -41,18 +48,20 @@
     End Sub
 
     Private Sub LogisticPerHour()
-
         dgvLogistic.Rows.Clear()
 
         dgvLogistic.ColumnCount = 8
         dgvLogistic.Columns(0).Name = "后勤"
+        dgvLogistic.Columns(0).Width = 75
         dgvLogistic.Columns(1).Name = "任务时间"
         dgvLogistic.Columns(2).Name = "人力/小时"
         dgvLogistic.Columns(3).Name = "弹药/小时"
         dgvLogistic.Columns(4).Name = "口粮/小时"
         dgvLogistic.Columns(5).Name = "零件/小时"
         dgvLogistic.Columns(6).Name = "获得道具1"
+        dgvLogistic.Columns(6).Width = 110
         dgvLogistic.Columns(7).Name = "获得道具2"
+        dgvLogistic.Columns(7).Width = 110
 
         For i = 0 To arr_logistic.Count - 1
             If arr_logistic IsNot Nothing Then
@@ -128,4 +137,56 @@
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         CheckBox1_CheckedChanged(Nothing, Nothing)
     End Sub
+
+    ' Top Panel Settings
+    Public Const WM_NCLBUTTONDOWN As Integer = &HA1
+    Public Const HT_CAPTION As Integer = &H2
+
+    <DllImportAttribute("user32.dll")>
+    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+    End Function
+
+    <DllImportAttribute("user32.dll")>
+    Public Shared Function ReleaseCapture() As Boolean
+    End Function
+
+    Private Sub DragForm(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Panel1.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            ReleaseCapture()
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0)
+        End If
+    End Sub
+
+    Protected Overrides ReadOnly Property CreateParams() As CreateParams
+        Get
+            Dim CP As CreateParams = MyBase.CreateParams
+            CP.Style = &HA0000
+            Return CP
+        End Get
+    End Property
+
+    Private Sub picExit_Click(sender As Object, e As EventArgs) Handles picExit.Click
+        Me.Close()
+    End Sub
+
+    Private Sub picExit_MouseMove(sender As Object, e As MouseEventArgs) Handles picExit.MouseMove
+        picExit.BackColor = Color.FromArgb(100, 100, 100)
+    End Sub
+
+    Private Sub picExit_MouseLeave(sender As Object, e As EventArgs) Handles picExit.MouseLeave
+        picExit.BackColor = Color.FromArgb(66, 66, 66)
+    End Sub
+
+    Private Sub picMinimize_Click_1(sender As Object, e As EventArgs) Handles picMinimize.Click
+        WindowState = FormWindowState.Minimized
+    End Sub
+
+    Private Sub picMinimize_MouseMove(sender As Object, e As MouseEventArgs) Handles picMinimize.MouseMove
+        picMinimize.BackColor = Color.FromArgb(100, 100, 100)
+    End Sub
+
+    Private Sub picMinimize_MouseLeave(sender As Object, e As EventArgs) Handles picMinimize.MouseLeave
+        picMinimize.BackColor = Color.FromArgb(66, 66, 66)
+    End Sub
+
 End Class

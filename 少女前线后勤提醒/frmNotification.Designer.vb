@@ -48,10 +48,10 @@ Partial Class frmNotification
         'picExit
         '
         Me.picExit.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.picExit.Image = Global.少女前线后勤提醒.My.Resources.Resources._exit
-        Me.picExit.Location = New System.Drawing.Point(324, 5)
+        Me.picExit.Image = Global.少女前线后勤提醒.My.Resources.Resources.cross_white
+        Me.picExit.Location = New System.Drawing.Point(329, 5)
         Me.picExit.Name = "picExit"
-        Me.picExit.Size = New System.Drawing.Size(25, 25)
+        Me.picExit.Size = New System.Drawing.Size(20, 20)
         Me.picExit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picExit.TabIndex = 7
         Me.picExit.TabStop = False

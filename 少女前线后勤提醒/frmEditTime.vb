@@ -1,4 +1,6 @@
-﻿Public Class frmEditTime
+﻿Imports System.Runtime.InteropServices
+
+Public Class frmEditTime
 
     Dim hour As Integer
     Dim min As Integer
@@ -8,94 +10,119 @@
 
     Private Sub frmEditTime_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.icon
-        setComboBox()
+        txtHour.Text = hour.ToString
+        txtMin.Text = min.ToString
+        txtSec.Text = sec.ToString
     End Sub
 
-    Public Sub setTime(_index As Integer, _selectedIndex As Integer, time As String)
+    Public Sub setTime(_index As Integer, time As String)
         hour = Integer.Parse(time.Substring(0, 2))
         min = Integer.Parse(time.Substring(3, 2))
         sec = Integer.Parse(time.Substring(6, 2))
         index = _index
-        selectedIndex = _selectedIndex
-    End Sub
-
-    Private Sub setComboBox()
-        cboHour.Items.Clear()
-        cboMinute.Items.Clear()
-        cboSecond.Items.Clear()
-
-        If frmMain.arr_Logistic(selectedIndex).getHour > 0 Then
-            For i = 0 To frmMain.arr_Logistic(selectedIndex).getHour
-                cboHour.Items.Add(i)
-                If i = hour Then
-                    cboHour.SelectedIndex = i
-                End If
-            Next i
-
-            For i = 0 To 59
-                cboMinute.Items.Add(i)
-                If i = min Then
-                    cboMinute.SelectedIndex = i
-                End If
-            Next i
-
-            For i = 0 To 59
-                cboSecond.Items.Add(i)
-                If i = sec Then
-                    cboSecond.SelectedIndex = i
-                End If
-            Next i
-        Else
-            cboHour.Items.Add(0)
-            cboHour.SelectedIndex = 0
-
-            For i = 0 To min
-                cboMinute.Items.Add(i)
-                If i = min Then
-                    cboMinute.SelectedIndex = i
-                End If
-            Next i
-
-            For i = 0 To 59
-                cboSecond.Items.Add(i)
-                If i = sec Then
-                    cboSecond.SelectedIndex = i
-                End If
-            Next i
-        End If
     End Sub
 
     Private Sub btnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
+        If Integer.TryParse(txtHour.Text, vbInteger) = False Or
+           Integer.TryParse(txtMin.Text, vbInteger) = False Or
+           Integer.TryParse(txtSec.Text, vbInteger) = False Then
 
-        If cboHour.SelectedIndex = frmMain.arr_Logistic(selectedIndex).getHour And
-            cboMinute.SelectedIndex > frmMain.arr_Logistic(selectedIndex).getMinute Then
-            MessageBox.Show("设定的时间大于后勤时间", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            frmMsgBox.title = "错误"
+            frmMsgBox.content = "请输入正确的格式。"
+            frmMsgBox.btnYesString = "确定"
+            frmMsgBox.msgType = "Yes"
+            frmMsgBox.ShowDialog()
         Else
-            If cboHour.SelectedIndex = frmMain.arr_Logistic(selectedIndex).getHour And cboMinute.SelectedIndex = frmMain.arr_Logistic(selectedIndex).getMinute And cboSecond.SelectedIndex <> -1 Then
-                MessageBox.Show("设定的时间大于后勤时间", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If Integer.Parse(txtMin.Text) >= 60 Then
+                frmMsgBox.title = "错误"
+                frmMsgBox.content = "分钟不可大于59。"
+                frmMsgBox.btnYesString = "确定"
+                frmMsgBox.msgType = "Yes"
+                frmMsgBox.ShowDialog()
             Else
-                returnTime()
-                Close()
+                If Integer.Parse(txtSec.Text) >= 60 Then
+                    frmMsgBox.title = "错误"
+                    frmMsgBox.content = "秒数不可大于59。"
+                    frmMsgBox.btnYesString = "确定"
+                    frmMsgBox.msgType = "Yes"
+                    frmMsgBox.ShowDialog()
+                Else
+                    Dim time As Double = Integer.Parse(txtHour.Text) + (Integer.Parse(txtMin.Text) / 60) + (Integer.Parse(txtSec.Text) / 60 / 60)
+                    Dim logTime As Double = hour + (min / 60) + (sec / 60 / 60)
+
+                    If index = 5 Then
+                        frmMain.lblHour5.Text = time.ToString
+                        frmMain.lblTime5.Text = Integer.Parse(txtHour.Text).ToString("D2") & ":" &
+                            Integer.Parse(txtMin.Text).ToString("D2") & ":" &
+                            Integer.Parse(txtSec.Text).ToString("D2")
+                        Me.Close()
+                    Else
+                        If time > logTime Then
+                            frmMsgBox.title = "错误"
+                            frmMsgBox.content = "后勤时长必须小于该后勤的总时长。"
+                            frmMsgBox.btnYesString = "确定"
+                            frmMsgBox.msgType = "Yes"
+                            frmMsgBox.ShowDialog()
+                        Else
+                            If index = 1 Then
+                                frmMain.lblHour1.Text = time.ToString
+                                frmMain.lblTime1.Text = Integer.Parse(txtHour.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtMin.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtSec.Text).ToString("D2")
+                            ElseIf index = 2 Then
+                                frmMain.lblHour2.Text = time.ToString
+                                frmMain.lblTime2.Text = Integer.Parse(txtHour.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtMin.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtSec.Text).ToString("D2")
+                            ElseIf index = 3 Then
+                                frmMain.lblHour3.Text = time.ToString
+                                frmMain.lblTime3.Text = Integer.Parse(txtHour.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtMin.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtSec.Text).ToString("D2")
+                            ElseIf index = 4 Then
+                                frmMain.lblHour4.Text = time.ToString
+                                frmMain.lblTime4.Text = Integer.Parse(txtHour.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtMin.Text).ToString("D2") & ":" &
+                                    Integer.Parse(txtSec.Text).ToString("D2")
+                            End If
+                            Me.Close()
+                        End If
+                    End If
+                End If
             End If
+
         End If
     End Sub
 
-    Private Sub returnTime()
-        Dim time As Double = cboHour.SelectedIndex + (cboMinute.SelectedIndex / 60) + (cboSecond.SelectedIndex / 60 / 60)
+    ' Top Panel Settings
+    Public Const WM_NCLBUTTONDOWN As Integer = &HA1
+    Public Const HT_CAPTION As Integer = &H2
 
-        If index = 1 Then
-            frmMain.lblTime1.Text = cboHour.SelectedIndex.ToString("D2") & ":" & cboMinute.SelectedIndex.ToString("D2") & ":" & cboSecond.SelectedIndex.ToString("D2")
-            frmMain.lblHour1.Text = time.ToString
-        ElseIf index = 2 Then
-            frmMain.lblTime2.Text = cboHour.SelectedIndex.ToString("D2") & ":" & cboMinute.SelectedIndex.ToString("D2") & ":" & cboSecond.SelectedIndex.ToString("D2")
-            frmMain.lblHour2.Text = time.ToString
-        ElseIf index = 3 Then
-            frmMain.lblTime3.Text = cboHour.SelectedIndex.ToString("D2") & ":" & cboMinute.SelectedIndex.ToString("D2") & ":" & cboSecond.SelectedIndex.ToString("D2")
-            frmMain.lblHour3.Text = time.ToString
-        ElseIf index = 4 Then
-            frmMain.lblTime4.Text = cboHour.SelectedIndex.ToString("D2") & ":" & cboMinute.SelectedIndex.ToString("D2") & ":" & cboSecond.SelectedIndex.ToString("D2")
-            frmMain.lblHour4.Text = time.ToString
+    <DllImportAttribute("user32.dll")>
+    Public Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+    End Function
+
+    <DllImportAttribute("user32.dll")>
+    Public Shared Function ReleaseCapture() As Boolean
+    End Function
+
+    Private Sub DragForm(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Panel1.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            ReleaseCapture()
+            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0)
         End If
+    End Sub
+
+    Private Sub picExit_Click(sender As Object, e As EventArgs) Handles picExit.Click
+        Me.Close()
+    End Sub
+
+    Private Sub picExit_MouseMove(sender As Object, e As MouseEventArgs) Handles picExit.MouseMove
+        picExit.BackColor = Color.FromArgb(100, 100, 100)
+    End Sub
+
+    Private Sub picExit_MouseLeave(sender As Object, e As EventArgs) Handles picExit.MouseLeave
+        picExit.BackColor = Color.FromArgb(66, 66, 66)
     End Sub
 
 End Class

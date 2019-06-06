@@ -82,4 +82,10 @@
     Public Function getToken() As Boolean
         Return token
     End Function
+
+    Public Function getResWeight(mw As Integer, aw As Integer, rw As Integer, pw As Integer) As Double
+        Dim weight As Double = manpower / getTime() * mw + ammo / getTime() * aw + ration / getTime() * rw + part / getTime() * pw
+
+        Return weight
+    End Function
 End Class
